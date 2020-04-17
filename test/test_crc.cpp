@@ -1,0 +1,29 @@
+#include "test.h"
+#include "crc.h"
+
+TEST_CASE("crc8")
+{
+    unsigned char data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+
+    auto result = crc<8>(data);
+
+    REQUIRE(result == 0xF4);
+}
+
+TEST_CASE("crc16")
+{
+    unsigned char data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+
+    auto result = crc<16>(data);
+
+    REQUIRE(result == 0x31C3);
+}
+
+TEST_CASE("crc32")
+{
+    unsigned char data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+
+    auto result = crc<32>(data);
+
+    REQUIRE(result == 0x89A1897F);
+}
