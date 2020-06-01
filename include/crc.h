@@ -92,7 +92,7 @@ const unsigned int _crc_lut_32[] =
 template<int size_crc, typename T>
 auto crc(T & payload)
 {
-    auto * ptr = (char *)&payload;
+    auto * ptr = (unsigned char *)&payload;
 
     if constexpr (size_crc == 8)
     {
@@ -130,6 +130,47 @@ auto crc(T & payload)
 
         return crc;
     }
+}
+
+template<int size_crc>
+auto crc(unsigned char * ptr, int size)
+{
+    if constexpr (size_crc == 8)
+    {
+        unsigned char crc = 0;
+
+        for (int i = 0; i < size; i++)
+        {
+            auto pos = (crc ^ (ptr[i] << 0)) >> 0;
+            crc = _crc_lut_8[pos];
+        }
+
+        return crc;
+    }
+    else if constexpr (size_crc == 16)
+    {
+        unsigned short int crc = 0;
+
+        for (int i = 0; i < size; i++)
+        {
+            auto pos = (crc ^ (ptr[i] << 8)) >> 8;
+            crc = (crc << 8) ^ (_crc_lut_16[pos]);
+        }
+
+        return crc;
+    }
+    else if constexpr (size_crc == 32)
+    {
+        unsigned int crc = 0;
+
+        for (int i = 0; i < size; i++)
+        {
+            auto pos = (crc ^ (ptr[i] << 24)) >> 24;
+            crc = (crc << 8) ^ (_crc_lut_32[pos]);
+        }
+
+        return crc;
+    }   
 }
 
 #endif /* define: crc_h */
