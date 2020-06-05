@@ -133,8 +133,10 @@ auto crc(T & payload)
 }
 
 template<int size_crc>
-auto crc(unsigned char * ptr, int size)
+auto crc(void * memory, int size)
 {
+    unsigned char * ptr = (unsigned char *) memory;
+
     if constexpr (size_crc == 8)
     {
         unsigned char crc = 0;
